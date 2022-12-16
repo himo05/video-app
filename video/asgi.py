@@ -11,6 +11,9 @@ import os
 
 from django.core.asgi import get_asgi_application
 
+# Set the DJANGO_SETTINGS_MODULE environment variable to the
+# Django settings module for this project
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'video.settings')
 
+# Get the ASGI application for the project
 application = get_asgi_application()

@@ -3,6 +3,7 @@ from django.db import models
 from django.core.exceptions import ValidationError
 
 class Video(models.Model):
+    # Fields for storing video metadata
     name = models.CharField(max_length=200)
     url = models.CharField(max_length=400)
     notes = models.TextField(blank=True, null=True)
@@ -12,8 +13,10 @@ class Video(models.Model):
         # checks for a valid YouTube URL in the form
         # https://www.youtube.com/watch?v=12345678
         # where 12345678 is the video ID
-        # extract the video id from the URL, prevent save if not valid YouTube URL or id ID is not found in URL
+        # extract the video id from the URL, prevent save if not valid YouTube URL or id ID is not found in URL  
+             
         try:
+            # Parse the URL and check for required components
             url_components = parse.urlparse(self.url)
 
             if url_components.scheme != 'https':
@@ -25,8 +28,9 @@ class Video(models.Model):
             if url_components.path != '/watch':
                 raise ValidationError(f'Not a YouTube URL {self.url}')
             
+            # Check for the 'v' query parameter containing the video ID
             query_string = url_components.query
-            if not query_string:
+            if not query_string:   # empty string, empty list... 
                 raise ValidationError(f'Invalid YouTube URL {self.url}')
             parameters = parse.parse_qs(query_string, strict_parsing=True)
             parameter_list = parameters.get('v')
